@@ -1,0 +1,10 @@
+ec2_region: us-west-2
+
+# Ubuntu 14.04 64-bit
+ami_id: ami-86e0ffe7
+
+# Instance type
+instance_type: t1.micro
+
+# Key pair name
+key_name: wordpress-ansible-docker
