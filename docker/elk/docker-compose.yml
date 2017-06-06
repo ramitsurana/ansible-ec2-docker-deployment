@@ -1,0 +1,24 @@
+elasticsearch:
+    build: elasticsearch/
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+logstash:
+    build: logstash/
+    container_name: logstash
+    ports:
+      - "5000:5000"
+      - "12201:12201"
+      - "25826:25826"
+    links:
+      - elasticsearch
+
+kibana:
+    build: kibana/
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
