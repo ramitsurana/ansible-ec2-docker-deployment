@@ -1,0 +1,45 @@
+--
+
+- name: Configure EC@ instance
+  hosts: localhost
+  remote_user: ubuntu
+  connection: local
+  sudo: true
+
+
+  tasks:
+    - name: Removing previous docker 
+      command: apt-get remove docker docker-engine
+
+    - name: Update the machine
+      command: apt-get update
+    
+    - name: Installing essentials
+      command: apt-get install apt-transport-https ca-certificates curl software-properties-common
+      
+    - name: Adding GPG Key
+      command: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      
+    - name: Adding GPG Key
+      command: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) \
+      stable"
+      
+    - name: Update the machine
+      command: apt-get update
+    
+    - name: Installing Docker
+      command: apt-get install docker-ce
+    
+    - name: Adding ubuntu,docker to group
+      command: usermod -aG docker ubuntu
+    
+    - name: Switching user to root
+      command: su -
+    
+    - name: Installing Docker Compose
+      command: curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+      
+    - name: Making executable
+      command: chmod +x /usr/local/bin/docker-compose
+    
