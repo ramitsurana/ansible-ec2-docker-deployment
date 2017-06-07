@@ -1,10 +1,9 @@
 ---
 
-- name: Deploy application
+- name: Deploying ELK Stack
   hosts: localhost
   remote_user: ubuntu
-  tags: ['ELK', 'install']
-
+  connection: local
 
   tasks:
 
