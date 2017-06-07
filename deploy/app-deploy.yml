@@ -1,0 +1,12 @@
+---
+
+  name: Deploying app
+  hosts: localhost
+  remote_user: ubuntu
+  connection: local
+
+  tasks:
+
+    - name: Running docker-compose.yml in the background
+      command: docker-compose -f docker-compose.yml up -d
+         
