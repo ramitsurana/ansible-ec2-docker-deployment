@@ -12,7 +12,39 @@ Deploying wordpress blog using docker &amp; ansible on AWS
 
 ![ansible](https://cloud.githubusercontent.com/assets/8342133/26820071/2c1097a2-4abf-11e7-88d7-c303ee8e1473.png)
 
+The design of the model is to deploy the ELK stack,Wordpress and Redis on top of the docker in an EC2 instance.This is done using docker compose and dockerfiles.The provisioning of the system is done using ansible.The file structure is as follows:
+
+* Docker
+  - app
+    - wordpress
+    - redis
+    - docker-compose.yml
+  - elk
+    - elasticsearch
+    - kibana
+    - logstash
+    - docker-compose1.yml
+* Deploy
+  - app-deploy.yml
+  - ec2-configure.yml
+  - elk-deploy.yml
+
+* Ansible
+  - Info
+    - aws-credentials.yml
+    - specs.yml
+  - provision.yml
+
 ## Steps:
+
+### Creating EC2 
+
+This can be done using the provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/project1/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/project1/blob/master/ansible/info/specs.yml) file stated the region,ami and instance type.THe command to run the ansible playbook is as follows:
+
+````
+$ ansible-playbook ./provision.yml --private-key  <path-to-keypair>
+````
+
 ### Configuring EC2
 
 We can start configuring our EC2 instance by running some basic commands such as:
@@ -47,7 +79,7 @@ $ chmod +x /usr/local/bin/docker-compose
 This can be done using the ec2-configure.yml file present in the repo.The command would be:
 
 ````
-$ ansible-playbook ec2-configure.yml -i hosts --private-key  <path-to-keypair>
+$ ansible-playbook ./ec2-configure.yml --private-key  <path-to-keypair>
 ````
 
 
