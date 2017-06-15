@@ -1,0 +1,13 @@
+---
+
+- name: Deploying ELK Stack
+  hosts: local
+  remote_user: ubuntu
+  connection: local
+
+  tasks:
+  - name: Running docker-compose1.yml in the background
+    command: docker-compose -f docker-compose1.yml up -d
+      
+  - name: Importing the log file data to logstash
+    command: nc localhost 5000 < /var/log/auth.log     

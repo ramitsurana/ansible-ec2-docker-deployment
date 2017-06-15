@@ -1,7 +1,7 @@
 ---
 
 - name: AWS-Docker-Ansible Setup
-  hosts: localhost
+  hosts: local
   connection: local
   gather_facts: False
 
@@ -11,44 +11,39 @@
     - info/specs.yml
 
   tasks:
-
   - name: Create security group
     ec2_group:
-      ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-      ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       name: AWS-Docker-Ansible-group
       description: "A Security group"
-      region: "{{ ec2_region }}"
+      region: "{{aws_region}}"
+      ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"      
       rules:
         - proto: tcp
-          type: ssh
           from_port: 22
           to_port: 22
           cidr_ip: 0.0.0.0/0
         - proto: tcp
-          type: http
           from_port: 5601
           to_port: 5601
           cidr_ip: 0.0.0.0/0
         - proto: tcp
-          type: http
           from_port: 9200
           to_port: 9200
           cidr_ip: 0.0.0.0/0
         - proto: tcp
-          type: http
           from_port: 8081
           to_port: 8081
           cidr_ip: 0.0.0.0/0
-    register: basic_firewall
+    register: firewall
 
 
   - name: Create EC-2 instance
     ec2:
       ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
       ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
-      region: "{{ ec2_region }}"
-      group_id: "{{ basic_firewall.group_id }}"   
+      region: "{{ aws_region }}"
+      group_id: "{{ firewall.group_id }}"   
       instance_type: "{{ instance_type }}"
       image: "{{ ami_id }}"
       key_name: "{{ key_name }}"
