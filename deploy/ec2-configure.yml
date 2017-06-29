@@ -1,46 +1,47 @@
 ---
 
 - name: Configure EC2 instance
-  hosts: local
-  remote_user: ubuntu
-  connection: local
+  hosts: ec2
+  connection: ssh
   sudo: true
 
 
   tasks:
-  - name: Removing previous docker 
-    command: apt-get remove docker docker-engine -y
-
   - name: Update the machine
-    command: apt-get update -y
+    command: sudo apt-get clean && update -y
     
   - name: Installing essentials
     command: apt-get install apt-transport-https ca-certificates curl software-properties-common -y
       
   - name: Installing Curl
     command: apt-get install curl -y
-      
-  - name: Update the machine
-    command: apt-get update
   
   - name: Installing docker
-    command: apt-get install -y docker.io
-
-  - name: Update the machine2
-    command: apt-get update
+    command: apt install docker.io -y
 
   - name: Adding user to group
-    command: usermod -aG docker ${USER}
+    command: sudo usermod -aG docker ${USER}
+
+  - name: Restarting docker service
+    command: sudo service docker restart 
 
   - name: Switching user to root
     command: su -
-    
-  - name: Installing Pip
-    command: apt install python-pip -y
 
   - name: Installing Docker Compose
-    command: sudo pip install docker-compose
-      
-  - name: Making executable
-    command: chmod +x /usr/local/bin/docker-compose
+    command: sudo apt install docker-compose -y
+
+  - name: apt update
+    apt: update_cache=yes cache_valid_time=3600
+    register: apt_result
+    until: apt_result|success
+    retries: 3
+    delay: 1
+    sudo: yes
+    ignore_errors: yes
+
+  - name: retry if needed using command apt-get update
+    command: apt-get update
+    sudo: yes
+    when: apt_result|failed
     

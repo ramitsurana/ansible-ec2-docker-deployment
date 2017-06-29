@@ -12,19 +12,24 @@ Deploying wordpress blog using docker &amp; ansible on AWS
 
 ![ansible](https://cloud.githubusercontent.com/assets/8342133/26820071/2c1097a2-4abf-11e7-88d7-c303ee8e1473.png)
 
-The design of the model is to deploy the ELK stack,Wordpress and Redis on top of the docker in an EC2 instance.This is done using docker compose and dockerfiles.The provisioning of the system is done using ansible.The file structure is as follows:
+The design of the model is to deploy the ELK stack,Wordpress and Redis on top of the docker in an EC2 instance.This is done using docker compose and dockerfiles.The provisioning of the system is done using ansible.The base os is Ubuntu 14.04.For successful results,please avoid Ubuntu 16.04 as it does not contain pre-installed python. For the same, you can use: 
+
+````
+$ sudo apt-get install python-minimal -y
+````
+
+[Ref](https://github.com/ansible/ansible/issues/19584)
+
+The file structure is as follows:
 
 * Docker
   - app
-    - wordpress
-    - redis
-    - docker-compose.yml
+    - app1
+      - docker-compose.app.yml
     - app-deploy.yml
   - elk
-    - elasticsearch
-    - kibana
-    - logstash
-    - docker-compose1.yml
+    - elk1    
+      - docker-compose.yml
     - elk-deploy.yml
 
 * Deploy 
@@ -39,6 +44,43 @@ The design of the model is to deploy the ELK stack,Wordpress and Redis on top of
 
 ## Steps:
 
+### Configuring Hosts
+
+Please create and add the following lines at **/etc/ansible/hosts** file :
+
+````
+[local]
+127.0.0.1
+
+[ec2]
+<EC2-IP> ansible_user=ubuntu
+````
+
+You can choose the EC2 IP by choosing an elastic Ip for your instance.This is good way to fix an IP as it may change after a reboot of EC2 instance. This setting can be observed at EC2 Dashboard > Elastic IP. 
+
+Similarly you should also create another file at /etc/ansible/ansible.cfg.This is the main configuration file for ansible to run.You can uncomment add some sections in it as represented below:
+
+````
+[defaults]
+
+# some basic default values...
+
+inventory      = /etc/ansible/hosts
+library        = /usr/share/my_modules/
+remote_tmp     = $HOME/.ansible/tmp
+local_tmp      = $HOME/.ansible/tmp
+forks          = 5
+poll_interval  = 15
+sudo_user      = root
+#ask_sudo_pass = True
+#ask_pass      = True
+#transport      = smart
+remote_port    = 22
+#module_lang    = C
+#module_set_locale = True
+
+````
+
 ### Creating EC2 
 
 This can be done using the provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/project1/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/project1/blob/master/ansible/info/specs.yml) file stated the region,ami and instance type.THe command to run the ansible playbook is as follows:
@@ -47,31 +89,24 @@ This can be done using the provision.yml file present in the ansible dir.It requ
 $ sudo ansible-playbook provision.yml -i hosts -vv
 ````
 
+Remember to associate your Elastic IP with the EC2 instance.This can be observed under Elastic IP > Associate.
+
 ### Configuring EC2
 
 We can start configuring our EC2 instance by running some basic commands such as:
 
 ````
 //Installing Docker
-$ sudo apt-get remove docker docker-engine
-$ sudo apt-get update
-$ sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common
-$ sudo apt-get install curl -y
-$ sudo apt-get update
-$ sudo apt-get install -y docker.io
-$ sudo apt-get update
+$ sudo apt-get clean && update -y
+$ apt-get install apt-transport-https ca-certificates curl software-properties-common -y
+$ apt-get install curl -y
+$ sudo apt-get install docker.io -y
 $ sudo usermod -aG docker ${USER}
+$ sudo service docker restart
 
 //Installing docker compose
 $ sudo su -
-$ sudo apt-get  install python-pip -y
-$ sudo pip install docker-compose
-$ chmod +x /usr/local/bin/docker-compose
-
+$ sudo apt install docker-compose -y
 ````
 
 This can be done using the ec2-configure.yml file present in the repo.The command would be:
@@ -93,10 +128,10 @@ $ sudo ansible-playbook elk-deploy.yml -vv --private-key <keypair>
 The playbook consists of the below commands:
 
 ````
-$ docker-compose -f docker-compose1.yml up -d
-$ nc localhost 5000 < /var/log/auth.log
+$ cp elk1/docker-compose.yml ~/home/ubuntu/
+$ sudo docker-compose -f ~/home/ubuntu/docker-compose.yml up -d
+$ sudo rm -f ~/home/ubuntu/docker-compose.yml 
 
-(https://gist.github.com/tsaarni/bb54e158fd453cb6d7cb)
 ````
 
 ### Deploying Wordpress and Redis Containers using Docker Compose
@@ -111,12 +146,20 @@ $ sudo ansible-playbook app-deploy.yml -vv --private-key <keypair>
 The playbook consists of the following below commands:
 
 ````
-$ docker-compose -f docker-compose.yml up -d
+$ cp app1/docker-compose.yml ~/home/ubuntu/
+$ sudo docker-compose -f ~/home/ubuntu/docker-compose.app.yml up -d
+$ sudo rm -f ~/home/ubuntu/docker-compose.app.yml 
 ````
 
 ### Output
 
-The output can be observed using the ip address of the ec2 instance.In order to fix the IP of the ec2 instance we can associate an elastic ip to the instance.The Public DNS would be like ec2-xxx-xxx-xxx.compute.amazonaws.com.
+The output can be observed using the ip address of the ec2 instance.The Public DNS would be like ec2-xxx-xxx-xxx.compute.amazonaws.com.
+
+Service   | Port | 
+Wordpress : 8080
+Kibana    : 5601
+
+**Please check the inbound and outbound rules in case of any page loading and reloading errors.You can check it out at EC2 Dashboard > Security Groups.**
 
 ## License
 

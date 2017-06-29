@@ -1,13 +1,15 @@
 ---
 
 - name: Deploying ELK Stack
-  hosts: local
-  remote_user: ubuntu
-  connection: local
+  hosts: ec2
+  connection: ssh
 
   tasks:
-  - name: Running docker-compose1.yml in the background
-    command: docker-compose -f docker-compose1.yml up -d
+  - name: Copying docker-compose file
+    copy: src=elk1/docker-compose.yml dest=~/home/ubuntu/
+
+  - name: Running docker-compose.yml
+    command: sudo docker-compose -f ~/home/ubuntu/docker-compose.yml up -d
       
-  - name: Importing the log file data to logstash
-    command: nc localhost 5000 < /var/log/auth.log     
+  - name: Removing docker compose file
+    command: sudo rm -f ~/home/ubuntu/docker-compose.yml     
