@@ -1,5 +1,5 @@
 # Project1
-Deploying wordpress blog using docker &amp; ansible on AWS
+Using Ansible to setup Wordpress, MariaDB & ELK Stack to an AWS EC2 instance with Docker Compose 
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ Deploying wordpress blog using docker &amp; ansible on AWS
 
 ## Design
 
-![ansible](https://cloud.githubusercontent.com/assets/8342133/26820071/2c1097a2-4abf-11e7-88d7-c303ee8e1473.png)
+![arch](https://user-images.githubusercontent.com/8342133/27880020-2d11dfce-61e1-11e7-800e-9af806aa4903.png)
 
 The design of the model is to deploy the ELK stack,Wordpress and Redis on top of the docker in an EC2 instance.This is done using docker compose and dockerfiles.The provisioning of the system is done using ansible.The base os is Ubuntu 14.04.For successful results,please avoid Ubuntu 16.04 as it does not contain pre-installed python. For the same, you can use: 
 
@@ -43,6 +43,9 @@ The file structure is as follows:
   - hosts
 
 ## Steps:
+
+$ git clone https://github.com/ramitsurana/project1
+$ cd project1
 
 ### Configuring Hosts
 
@@ -105,8 +108,8 @@ $ sudo usermod -aG docker ${USER}
 $ sudo service docker restart
 
 //Installing docker compose
-$ sudo su -
-$ sudo apt install docker-compose -y
+$ sudo sudo apt-get install python-pip python-dev build-essential -y
+$ sudo pip install docker-compose==1.3.0
 ````
 
 This can be done using the ec2-configure.yml file present in the repo.The command would be:
