@@ -12,4 +12,4 @@
     command: sudo docker-compose -f ~/home/ubuntu/docker-compose.app.yml up -d
       
   - name: Removing docker compose file
-    command: sudo rm -f ~/home/ubuntu/docker-compose1.app.yml 
+    command: sudo rm -f ~/home/ubuntu/docker-compose.app.yml 
