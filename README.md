@@ -164,6 +164,10 @@ Kibana    : 5601
 
 **Please check the inbound and outbound rules in case of any page loading and reloading errors.You can check it out at EC2 Dashboard > Security Groups.**
 
+Sample video output can be found out [here](https://youtu.be/BHcSNVzWRlo) :
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=BHcSNVzWRlo" target="_blank"><img src="http://img.youtube.com/vi/BHcSNVzWRlo/0.jpg" alt="IMAGE ALT TEXT HERE" width="540" height="350" /></a>
+
 ## License
 
 MIT License
