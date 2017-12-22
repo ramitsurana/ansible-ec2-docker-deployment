@@ -8,6 +8,8 @@ Using Ansible to setup Wordpress, MariaDB & ELK Stack to an AWS EC2 instance wit
 * Python Boto    
 * Git
 
+( For Manual Installation - https://github.com/ramitsurana/project1/blob/master/Installation.md)
+
 ## Design
 
 ![arch](https://user-images.githubusercontent.com/8342133/27880020-2d11dfce-61e1-11e7-800e-9af806aa4903.png)
