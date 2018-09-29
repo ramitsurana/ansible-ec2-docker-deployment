@@ -1,4 +1,4 @@
-# Project1
+# Ansible-ec2-docker-deployment
 Using Ansible to setup Wordpress, MariaDB & ELK Stack to an AWS EC2 instance with Docker Compose 
 
 ## Prerequisites
