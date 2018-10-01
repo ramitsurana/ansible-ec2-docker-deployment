@@ -46,8 +46,10 @@ The file structure is as follows:
 
 ## Steps:
 
-$ git clone https://github.com/ramitsurana/project1
-$ cd project1
+```
+$ git clone https://github.com/ramitsurana/ansible-ec2-docker-deployment/
+$ cd ansible-ec2-docker-deployment/
+```
 
 ### Configuring Hosts
 
@@ -88,7 +90,7 @@ remote_port    = 22
 
 ### Creating EC2 
 
-This can be done using the provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/project1/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/project1/blob/master/ansible/info/specs.yml) file stated the region,ami and instance type.THe command to run the ansible playbook is as follows:
+This can be done using the provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/specs.yml) file stated the region,ami and instance type.THe command to run the ansible playbook is as follows:
 
 ````
 $ sudo ansible-playbook provision.yml -i hosts -vv

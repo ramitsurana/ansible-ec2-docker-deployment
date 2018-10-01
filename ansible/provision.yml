@@ -16,25 +16,26 @@
       name: AWS-Docker-Ansible-group
       description: "A Security group"
       region: "{{aws_region}}"
-      ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-      ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"      
+      vpc_id: "{{ vpc_id }}"
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"      
       rules:
         - proto: tcp
           from_port: 22
           to_port: 22
-          cidr_ip: 0.0.0.0/0
+          cidr_ip: "{{ cidr_range }}"
         - proto: tcp
           from_port: 5601
           to_port: 5601
-          cidr_ip: 0.0.0.0/0
+          cidr_ip: "{{ cidr_range }}"
         - proto: tcp
           from_port: 9200
           to_port: 9200
-          cidr_ip: 0.0.0.0/0
+          cidr_ip: "{{ cidr_range }}"
         - proto: tcp
           from_port: 8081
           to_port: 8081
-          cidr_ip: 0.0.0.0/0
+          cidr_ip: "{{ cidr_range }}"
       rules_egress:
       - proto: all
         from_port: 0
@@ -45,17 +46,19 @@
 
   - name: Create EC-2 instance
     ec2:
-      ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-      ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      vpc_subnet_id: "{{ vpc_subnet_id }}"
       region: "{{ aws_region }}"
       group_id: "{{ firewall.group_id }}"   
       instance_type: "{{ instance_type }}"
       image: "{{ ami_id }}"
       key_name: "{{ key_name }}"
       instance_tags:
-            Name: aws-docker-ansible
+            Name: "{{ tags }}"
       exact_count: 1
       count_tag:
-            Name: aws-docker-ansible
+            Name: "{{ tags }}"
       wait: true
+      assign_public_ip: yes
     register: ec2
