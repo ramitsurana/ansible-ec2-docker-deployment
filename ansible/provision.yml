@@ -55,10 +55,10 @@
       image: "{{ ami_id }}"
       key_name: "{{ key_name }}"
       instance_tags:
-            Name: "{{ tags }}"
+            Name: "{{ tags_used }}"
       exact_count: 1
       count_tag:
-            Name: "{{ tags }}"
+            Name: "{{ tags_used }}"
       wait: true
       assign_public_ip: yes
     register: ec2

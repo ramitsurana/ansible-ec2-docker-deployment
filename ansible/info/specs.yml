@@ -10,7 +10,7 @@ instance_type: t2.micro
 key_name: ramit-rean
 
 # Tags
-tags: aws-docker-ansible 
+tags_used: aws-docker-ansible 
 
 # CIDR Range
 cidr_range: <YOUR-IP>/32
