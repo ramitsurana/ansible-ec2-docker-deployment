@@ -8,7 +8,7 @@ Using Ansible to setup Wordpress, MariaDB & ELK Stack to an AWS EC2 instance wit
 * Python Boto    
 * Git
 
-( For Manual Installation - https://github.com/ramitsurana/project1/blob/master/Installation.md)
+( For Manual Installation - https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/Installation.md)
 
 ## Design
 
@@ -42,6 +42,7 @@ The file structure is as follows:
     - aws-credentials.yml
     - specs.yml
   - provision.yml
+  - vpc-provision.yml
   - hosts
 
 ## Steps:
@@ -87,10 +88,17 @@ remote_port    = 22
 #module_set_locale = True
 
 ````
+### Creating VPC 
+
+This can be done using the vpc-provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/specs.yml) file is already configured. The command to run the ansible playbook is as follows:
+
+````
+$ sudo ansible-playbook vpc-provision.yml -i hosts -vv
+````
 
 ### Creating EC2 
 
-This can be done using the provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/specs.yml) file stated the region,ami and instance type.THe command to run the ansible playbook is as follows:
+This can be done using the provision.yml file present in the ansible dir.It requires you to put your aws credentials [here](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/aws-credentials.yml).The [specs.yml](https://github.com/ramitsurana/ansible-ec2-docker-deployment/blob/master/ansible/info/specs.yml) file stated the region,ami and instance type.The command to run the ansible playbook is as follows:
 
 ````
 $ sudo ansible-playbook provision.yml -i hosts -vv

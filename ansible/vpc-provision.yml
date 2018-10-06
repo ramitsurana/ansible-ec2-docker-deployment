@@ -25,79 +25,79 @@
       wait_for: timeout=30
       delegate_to: localhost
 
-    - name:               Set VPC ID in variable
+    - name: Set VPC ID in variable
       set_fact:
-        vpc_id:           "{{ my_vpc.vpc.id }}"
+        vpc_id: "{{ my_vpc.vpc.id }}"
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
-    - name:               Create Public Subnet
+    - name: Create Public Subnet
       ec2_vpc_subnet:
-        state:            "present"
-        vpc_id:           "{{ vpc_id }}"
-        cidr:             "{{ public_subnet_1_cidr }}"
-        az:               "{{ aws_region }}a"
-        region:           "{{ aws_region }}"
+        state: "present"
+        vpc_id: "{{ vpc_id }}"
+        cidr: "{{ public_subnet_1_cidr }}"
+        az: "{{ aws_region }}a"
+        region: "{{ aws_region }}"
         resource_tags:
-          Name:           "Public Subnet"
+          Name: "Public Subnet"
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_public_subnet
 
-    - name:               Set Public Subnet ID in variable
+    - name: Set Public Subnet ID in variable
       set_fact:
         public_subnet_id: "{{ my_public_subnet.subnet.id }}"
       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
 
-    - name:               Create Internet Gateway for VPC
+    - name: Create Internet Gateway for VPC
       ec2_vpc_igw:
-        vpc_id:           "{{ vpc_id }}"
-        region:           "{{ aws_region }}"
-        state:            "present"
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ aws_region }}"
+        state: "present"
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_vpc_igw
 
 
-    - name:               Set Internet Gateway ID in variable
+    - name: Set Internet Gateway ID in variable
       set_fact:
-        igw_id:           "{{ my_vpc_igw.gateway_id }}"
+        igw_id: "{{ my_vpc_igw.gateway_id }}"
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
-    - name:               Set up public subnet route table
+    - name: Set up public subnet route table
       ec2_vpc_route_table:
-        vpc_id:           "{{ vpc_id }}"
-        region:           "{{ aws_region }}"
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ aws_region }}"
         tags:
-          Name:           "Public"
+          Name: "Public"
         subnets:
           - "{{ public_subnet_id }}"
         routes:
-          - dest:         "0.0.0.0/0"
-            gateway_id:   "{{ igw_id }}"
+          - dest: "0.0.0.0/0"
+            gateway_id: "{{ igw_id }}"
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
-    - name:               Create Main Security Group
+    - name: Create Main Security Group
       ec2_group:
-        name:             "My Security Group"
-        description:      "My Security Group"
-        vpc_id:           "{{ vpc_id }}"
-        region:           "{{ aws_region }}"
+        name: "My Security Group"
+        description: "My Security Group"
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ aws_region }}"
         rules:
-          - proto:        "tcp"
-            from_port:    "22"
-            to_port:      "22"
-            cidr_ip:      "{{ my_ip_range }}"
+          - proto: "tcp"
+            from_port: "22"
+            to_port: "22"
+            cidr_ip: "{{ my_ip_range }}"
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_vpc_sg
 
-    - name:               Set Security Group ID in variable
+    - name: Set Security Group ID in variable
       set_fact:
-        sg_id:           "{{ my_vpc_sg.group_id }}"
+        sg_id: "{{ my_vpc_sg.group_id }}"
       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
