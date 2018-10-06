@@ -16,8 +16,8 @@
         cidr_block: "{{ vpc_cidr_block }}"
         region: "{{ aws_region }}"
         state: "present"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_vpc
 
 
@@ -28,8 +28,8 @@
     - name: Set VPC ID in variable
       set_fact:
         vpc_id: "{{ my_vpc.vpc.id }}"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
     - name: Create Public Subnet
       ec2_vpc_subnet:
@@ -40,15 +40,15 @@
         region: "{{ aws_region }}"
         resource_tags:
           Name: "Public Subnet"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_public_subnet
 
     - name: Set Public Subnet ID in variable
       set_fact:
         public_subnet_id: "{{ my_public_subnet.subnet.id }}"
-      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
 
     - name: Create Internet Gateway for VPC
@@ -56,16 +56,16 @@
         vpc_id: "{{ vpc_id }}"
         region: "{{ aws_region }}"
         state: "present"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_vpc_igw
 
 
     - name: Set Internet Gateway ID in variable
       set_fact:
         igw_id: "{{ my_vpc_igw.gateway_id }}"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
     - name: Set up public subnet route table
       ec2_vpc_route_table:
@@ -78,8 +78,8 @@
         routes:
           - dest: "0.0.0.0/0"
             gateway_id: "{{ igw_id }}"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
 
     - name: Create Main Security Group
       ec2_group:
@@ -92,12 +92,12 @@
             from_port: "22"
             to_port: "22"
             cidr_ip: "{{ my_ip_range }}"
-        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
       register: my_vpc_sg
 
     - name: Set Security Group ID in variable
       set_fact:
         sg_id: "{{ my_vpc_sg.group_id }}"
-      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+      ec2_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      ec2_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"

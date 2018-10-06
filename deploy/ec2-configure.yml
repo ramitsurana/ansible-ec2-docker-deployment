@@ -25,7 +25,7 @@
   - name: Restarting docker service
     command: sudo service docker restart 
 
-    - name: Updating the machine 2
+  - name: Updating the machine 2
     command: sudo apt-get update
 
   - name: Installing Python Pip

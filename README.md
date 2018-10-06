@@ -127,10 +127,8 @@ $ sudo pip install docker-compose==1.3.0
 This can be done using the ec2-configure.yml file present in the repo.The command would be:
 
 ````
-$sudo ansible-playbook ec2-configure.yml -vv --private-key  <path-to-keypair>
+$ sudo ansible-playbook ec2-configure.yml -vv --private-key  <path-to-keypair>
 ````
-
-
 
 ### Deploying ELK Stack using Docker Compose
 
@@ -149,7 +147,7 @@ $ sudo rm -f ~/home/ubuntu/docker-compose.yml
 
 ````
 
-### Deploying Wordpress and Redis Containers using Docker Compose
+### Deploying Wordpress and Mariadb Containers using Docker Compose
 
 It can be done using the ansible playbook.
 
@@ -168,11 +166,14 @@ $ sudo rm -f ~/home/ubuntu/docker-compose.app.yml
 
 ### Output
 
+**Add tag Owner : <YOUR-NAME> in EC2 instance.**
+
 The output can be observed using the ip address of the ec2 instance.The Public DNS would be like ec2-xxx-xxx-xxx.compute.amazonaws.com.
 
 Service   | Port | 
-Wordpress : 8080
-Kibana    : 5601
+|:--------|------:|
+|Wordpress | 8080|
+|Kibana    | 5601|
 
 **Please check the inbound and outbound rules in case of any page loading and reloading errors.You can check it out at EC2 Dashboard > Security Groups.**
 

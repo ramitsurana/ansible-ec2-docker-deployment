@@ -33,8 +33,8 @@
           to_port: 9200
           cidr_ip: "{{ cidr_range }}"
         - proto: tcp
-          from_port: 8081
-          to_port: 8081
+          from_port: 8080
+          to_port: 8080
           cidr_ip: "{{ cidr_range }}"
       rules_egress:
       - proto: all

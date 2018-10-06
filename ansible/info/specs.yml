@@ -13,14 +13,14 @@ key_name: ramit-rean
 tags_used: aws-docker-ansible 
 
 # CIDR Range
-cidr_range: <YOUR-IP>/32
+cidr_range: */32
 
 # VPC Information
 vpc_name: aws-ansible-docker
 vpc_cidr_block: 10.0.0.0/16
 
 # For Security Group Rule
-my_ip_range: <YOUR-IP>/32
+my_ip_range: */32
 
 # Subnets
 public_subnet_1_cidr:  10.0.0.0/20
